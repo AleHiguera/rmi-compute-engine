@@ -2,6 +2,7 @@ package client;
 import compute.Task;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Pi implements Task<BigDecimal>, Serializable {
 
@@ -12,8 +13,9 @@ public class Pi implements Task<BigDecimal>, Serializable {
             BigDecimal.valueOf(4);
 
     /** rounding mode to use during pi computation */
-    private static final int roundingMode =
-            BigDecimal.ROUND_HALF_EVEN;
+    // Usar la clase RoundingMode en lugar del entero obsoleto
+    private static final RoundingMode roundingMode =
+            RoundingMode.HALF_EVEN;
 
     /** digits of precision after the decimal point */
     private final int digits;
@@ -35,10 +37,10 @@ public class Pi implements Task<BigDecimal>, Serializable {
 
     /**
      * Compute the value of pi to the specified number of
-     * digits after the decimal point.  The value is
+     * digits after the decimal point. The value is
      * computed using Machin's formula:
      *
-     *          pi/4 = 4*arctan(1/5) - arctan(1/239)
+     * pi/4 = 4*arctan(1/5) - arctan(1/239)
      *
      * and a power series expansion of arctan(x) to
      * sufficient precision.
@@ -49,18 +51,20 @@ public class Pi implements Task<BigDecimal>, Serializable {
         BigDecimal arctan1_239 = arctan(239, scale);
         BigDecimal pi = arctan1_5.multiply(FOUR).subtract(
                 arctan1_239).multiply(FOUR);
+        // Usar RoundingMode.HALF_UP al final
         return pi.setScale(digits,
-                BigDecimal.ROUND_HALF_UP);
+                RoundingMode.HALF_UP);
     }
+
     /**
      * Compute the value, in radians, of the arctangent of
      * the inverse of the supplied integer to the specified
-     * number of digits after the decimal point.  The value
+     * number of digits after the decimal point. The value
      * is computed using the power series expansion for the
      * arc tangent:
      *
      * arctan(x) = x - (x^3)/3 + (x^5)/5 - (x^7)/7 +
-     *     (x^9)/9 ...
+     * (x^9)/9 ...
      */
     public static BigDecimal arctan(int inverseX,
                                     int scale)
@@ -70,15 +74,18 @@ public class Pi implements Task<BigDecimal>, Serializable {
         BigDecimal invX2 =
                 BigDecimal.valueOf(inverseX * inverseX);
 
+        // Usar RoundingMode
         numer = BigDecimal.ONE.divide(invX,
                 scale, roundingMode);
 
         result = numer;
         int i = 1;
         do {
+            // Usar RoundingMode
             numer =
                     numer.divide(invX2, scale, roundingMode);
             int denom = 2 * i + 1;
+            // Usar RoundingMode
             term =
                     numer.divide(BigDecimal.valueOf(denom),
                             scale, roundingMode);

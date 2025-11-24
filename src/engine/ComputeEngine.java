@@ -55,7 +55,7 @@ public class ComputeEngine implements Compute {
     private static void startWebServer(String ip) {
         try {
             int port = 8000;
-            Path path = Path.of(System.getProperty("user.dir"), "out/production/RMI");
+            Path path = Path.of(System.getProperty("user.dir"), "out/production/rmi-compute-engine");
             System.out.println("Iniciando servidor de archivos en: " + path.toAbsolutePath());
 
             var server = SimpleFileServer.createFileServer(

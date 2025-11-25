@@ -20,11 +20,14 @@ public class ComputeEngine implements Compute {
     }
 
     public <T> T executeTask(Task<T> t) {
-        return t.execute();
+        System.out.println("Peticion recibida ");
+        T result = t.execute();
+        System.out.println("Fin");
+        return result;
     }
 
     public static void main(String[] args) {
-        String myIP = "localhost"; // <--- CAMBIA A TU IP REAL SI ES REMOTO
+        String myIP = "192.168.1.137"; // <--- CAMBIA A TU IP REAL SI ES REMOTO
         startWebServer(myIP);
 
         System.setProperty("java.rmi.server.hostname", myIP);
